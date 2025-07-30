@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+  - anaconda
+  - bioconda
+  - defaults
+dependencies:
+  - gridss=2.13.2
