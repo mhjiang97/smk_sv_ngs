@@ -1,6 +1,4 @@
-  - conda-forge
-  - anaconda
+channels:
   - bioconda
-  - defaults
 dependencies:
   - wham=1.8.0

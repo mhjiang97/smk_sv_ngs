@@ -1,8 +1,6 @@
 channels:
   - conda-forge
-  - anaconda
   - bioconda
-  - defaults
 dependencies:
   - awscli=2.27.53
   - snpeff=5.2

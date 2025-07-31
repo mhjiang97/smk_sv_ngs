@@ -1,4 +1,6 @@
 rule fastp:
+    conda:
+        "../../envs/fastp.yaml"
     input:
         fq_1=f"{DIR_DATA}/{{sample}}{SUFFIX_READ_1}",
         fq_2=f"{DIR_DATA}/{{sample}}{SUFFIX_READ_2}",

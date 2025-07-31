@@ -96,7 +96,9 @@ path_fai = config["fasta"] + ".fai"
 path_cache_snpeff = (
     f"{config['cache_snpeff']}/{config['genome']}.{config['version_snpeff']}"
 )
-path_cache_vep = f"{config['cache_vep']}/{config['species']}/{config['version_vep']}_{config['genome']}"
+path_cache_vep = (
+    f"{config['cache_vep']}/{config['species']}/{config['version_vep']}_{config['genome']}"
+)
 
 
 # *--------------------------------------------------------------------------* #

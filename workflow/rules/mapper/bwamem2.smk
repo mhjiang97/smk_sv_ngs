@@ -1,4 +1,6 @@
 rule bwamem2_index:
+    conda:
+        "../../envs/bwamem2.yaml"
     input:
         fasta=config["fasta"],
     output:
@@ -15,6 +17,8 @@ rule bwamem2_index:
 
 
 rule bwamem2:
+    conda:
+        "../../envs/bwamem2.yaml"
     input:
         unpack(get_fastq_files),
         index=ancient(files_bwamem2_index),

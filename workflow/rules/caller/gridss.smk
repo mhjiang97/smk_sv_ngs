@@ -37,6 +37,8 @@ rule gridss:
 
 
 rule format_gridss:
+    conda:
+        "../../envs/r.yaml"
     input:
         vcf="gridss/{sample}/tmp.vcf",
     output:

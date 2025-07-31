@@ -1,4 +1,6 @@
 rule separate_types:
+    conda:
+        "../../envs/bcftools.yaml"
     input:
         vcf="{caller}/{sample}/{sample}.duphold.filtered.vcf",
     output:

@@ -1,4 +1,6 @@
 rule extract_sv_ids:
+    conda:
+        "../../envs/bcftools.yaml"
     input:
         survivor="survivor/{sample}/{sample}.{type_sv}.merged.vcf",
     output:
@@ -19,6 +21,8 @@ rule extract_sv_ids:
 
 
 rule extract_annotations:
+    conda:
+        "../../envs/bcftools.yaml"
     input:
         vep="{caller}/{sample}/{sample}.vep.vcf",
         snpeff="{caller}/{sample}/{sample}.snpeff.vcf",

@@ -1,7 +1,4 @@
 channels:
-  - anaconda
-  - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - ensembl-vep=114.2

@@ -1,4 +1,6 @@
 rule survivor:
+    conda:
+        "../../envs/survivor.yaml"
     input:
         vcfs=expand(
             "{caller}/{{sample}}/{{sample}}.{{type_sv}}.vcf",

@@ -1,7 +1,4 @@
 channels:
-  - anaconda
-  - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - vcf2maf=1.6.22

@@ -1,4 +1,6 @@
 rule fastqc:
+    conda:
+        "../../envs/fastqc.yaml"
     input:
         unpack(get_fastq_files),
     output:
@@ -20,6 +22,8 @@ rule fastqc:
 
 
 rule multiqc:
+    conda:
+        "../../envs/multiqc.yaml"
     input:
         fastqcs=branch(
             TO_CLEAN_FQ,

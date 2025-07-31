@@ -1,6 +1,8 @@
 rule annotsv:
     shadow:
         "minimal"
+    conda:
+        "../../envs/annotsv.yaml"
     input:
         vcf="{caller}/{sample}/{sample}.vcf",
     output:

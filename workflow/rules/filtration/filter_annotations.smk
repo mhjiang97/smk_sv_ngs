@@ -1,4 +1,6 @@
 rule filter_annotations:
+    conda:
+        "../../envs/r.yaml"
     input:
         annotsv="{caller}/{sample}/{sample}.annotsv.tsv",
         maf="{caller}/{sample}/merged/{sample}.{type_sv}.vep.maf",

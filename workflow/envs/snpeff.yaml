@@ -1,8 +1,5 @@
 channels:
-  - anaconda
-  - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - snpeff=5.2
   - snpsift=5.2

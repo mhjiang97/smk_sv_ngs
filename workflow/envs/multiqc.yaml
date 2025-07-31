@@ -1,4 +1,4 @@
 channels:
   - bioconda
 dependencies:
-  - manta=1.6.0
+  - multiqc=1.30

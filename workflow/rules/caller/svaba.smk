@@ -33,6 +33,8 @@ rule svaba:
 
 
 rule format_svaba:
+    conda:
+        "../../envs/r.yaml"
     input:
         vcf="svaba/{sample}/{sample}.svaba.sv.vcf",
     output:

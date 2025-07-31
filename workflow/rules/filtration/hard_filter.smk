@@ -1,4 +1,6 @@
 rule hard_filter:
+    conda:
+        "../../envs/bcftools.yaml"
     input:
         vcf="{caller}/{sample}/{sample}.duphold.vcf",
     output:
