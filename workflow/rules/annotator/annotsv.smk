@@ -4,6 +4,7 @@ rule annotsv:
     conda:
         "../../envs/annotsv.yaml"
     input:
+        **get_annotsv_cache_outputs(),
         vcf="{caller}/{sample}/{sample}.vcf",
     output:
         tsv=touch(protected("{caller}/{sample}/{sample}.annotsv.tsv")),
@@ -12,6 +13,7 @@ rule annotsv:
         ),
     params:
         dir="{caller}/{sample}",
+        dir_cache=config["cache_annotsv"],
         genome=format_genome(config["genome"]),
         max_size=config["max_size_annotsv"],
         size_chunk=config["size_chunk"],
@@ -49,6 +51,7 @@ rule annotsv:
 
                 AnnotSV \\
                     -genomeBuild {params.genome} \\
+                    -annotationsDir {params.dir_cache} \\
                     -SVinputFile ${{input_long}} \\
                     -outputFile ${{output_long}} \\
                     -SVminSize 1 \\
@@ -60,6 +63,7 @@ rule annotsv:
 
             AnnotSV \\
                 -genomeBuild {params.genome} \\
+                -annotationsDir {params.dir_cache} \\
                 -SVinputFile ${{input%.*}}.short.vcf \\
                 -outputFile ${{input%.*}}.short.annotsv.tsv \\
                 -SVminSize 1 \\
@@ -84,6 +88,7 @@ rule annotsv:
         else
             AnnotSV \\
                 -genomeBuild {params.genome} \\
+                -annotationsDir {params.dir_cache} \\
                 -SVinputFile {input.vcf} \\
                 -outputFile {output.tsv} \\
                 -SVminSize 1 \\

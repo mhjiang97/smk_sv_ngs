@@ -23,6 +23,9 @@ for caller in CALLERS:
     include: f"rules/caller/{caller}.smk"
 
 
+include: "rules/annotator/cache.smk"
+
+
 for annotator in ANNOTATORS:
 
     include: f"rules/annotator/{annotator}.smk"

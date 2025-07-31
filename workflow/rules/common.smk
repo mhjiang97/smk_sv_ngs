@@ -10,6 +10,12 @@ configfile: "config/config.yaml"
 pepfile: "config/pep/config.yaml"
 
 
+path_env_vep = Path("workflow/envs/vep.yaml").resolve()
+
+
+path_env_annotsv = Path("workflow/envs/annotsv.yaml").resolve()
+
+
 if config["dir_run"] and config["dir_run"] is not None:
 
     workdir: config["dir_run"]
@@ -64,6 +70,8 @@ ANNOTATORS = ["vep", "snpeff", "annotsv"]
 
 SUFFIX_READ_1, SUFFIX_READ_2 = config["suffixes_fastq"]
 
+SPECIES = config["species"]
+
 DF_SAMPLE = pep.sample_table
 SAMPLES = DF_SAMPLE["sample_name"]
 
@@ -106,6 +114,8 @@ path_cache_vep = (
 # *--------------------------------------------------------------------------* #
 perform_validations_with_rich(
     config,
+    path_env_vep,
+    path_env_annotsv,
     [
         "fasta",
         "polymorphism_known",

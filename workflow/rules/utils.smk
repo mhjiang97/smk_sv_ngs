@@ -1,6 +1,8 @@
 import logging
+from math import floor
 from pathlib import Path
 
+import yaml
 from rich.console import Console
 from rich.logging import RichHandler
 
@@ -55,9 +57,88 @@ def format_survivor_parameters(parameter):
     return 1 if parameter else 0
 
 
+def get_annotsv_cache_outputs():
+    if SPECIES in ["homo_sapiens"]:
+        return {
+            "dir_1": f"{config['cache_annotsv']}/Annotations_Human",
+            "dir_2": f"{config['cache_annotsv']}/Annotations_Exomiser",
+        }
+    else:
+        raise ValueError("Unsupported species")
+
+
+def get_annotsv_cache_parameters():
+    if SPECIES in ["homo_sapiens"]:
+        return {
+            "arg_install": "install-human-annotation",
+            "dirs": [
+                "share/AnnotSV/Annotations_Human",
+                "share/AnnotSV/Annotations_Exomiser",
+            ],
+        }
+    else:
+        raise ValueError("Unsupported species")
+
+
 # *--------------------------------------------------------------------------* #
 # * Functions to validate files in the config file                           * #
 # *--------------------------------------------------------------------------* #
+def validate_vep_version(config, env_file):
+    with open(env_file, "r") as f:
+        config_vep = yaml.safe_load(f)
+
+    dependencies = config_vep.get("dependencies", [])
+    dependency_vep = next(
+        (
+            dep
+            for dep in dependencies
+            if isinstance(dep, str) and dep.startswith("ensembl-vep")
+        ),
+        None,
+    )
+
+    version_vep = dependency_vep.split("=")[1]
+    version_env_major = floor(float(version_vep))
+    version_config = config["version_vep"]
+
+    if version_env_major != version_config:
+        logger.warning(
+            f"[bold yellow]⚠ VEP version mismatch detected[/]: "
+            f"config = [cyan]{version_config}[/], env = [magenta]{version_env_major}[/]."
+        )
+        logger.info(
+            f"[bold green]Recommendation:[/] Align the VEP version in 'config/config.yaml' with 'workflow/envs/vep.yaml'."
+        )
+
+
+def validate_annotsv_version(config, env_file):
+    with open(env_file, "r") as f:
+        config_annotsv = yaml.safe_load(f)
+
+    dependencies = config_annotsv.get("dependencies", [])
+    dependency_annotsv = next(
+        (
+            dep
+            for dep in dependencies
+            if isinstance(dep, str) and dep.startswith("annotsv")
+        ),
+        None,
+    )
+
+    version_annotsv = dependency_annotsv.split("=")[1]
+    version_config = config["version_annotsv"].strip("v")
+
+    if version_annotsv != version_config:
+        logger.error(
+            f"[bold red]✖ Annotsv version mismatch detected[/]: "
+            f"config = [cyan]{version_config}[/], env = [magenta]{version_annotsv}[/]."
+        )
+        logger.info(
+            f"[bold green]Recommendation:[/] Align the Annotsv version in 'config/config.yaml' with 'workflow/envs/annotsv.yaml'."
+        )
+        raise ValueError()
+
+
 def validate_files(config, parameters):
     for param in parameters:
         paths = config[param]
@@ -75,7 +156,7 @@ def validate_files(config, parameters):
             raise ValueError()
 
 
-def perform_validations_with_rich(config, file_params):
+def perform_validations_with_rich(config, vep_env_path, annotsv_env_path, file_params):
     root = logging.getLogger()
     old_level = root.level
     old_handlers = root.handlers.copy()
@@ -89,6 +170,8 @@ def perform_validations_with_rich(config, file_params):
     )
     logger = logging.getLogger()
 
+    validate_vep_version(config, vep_env_path)
+    validate_annotsv_version(config, annotsv_env_path)
     validate_files(config, file_params)
 
     root.setLevel(old_level)

@@ -43,15 +43,6 @@ project/
 
 Additional dependencies are automatically installed by **Mamba** or **conda**. Environments are defined in yaml files under `workflow/envs/`.
 
-- [**BCFtools**](http://samtools.github.io/bcftools/)
-- [**GATK**](https://gatk.broadinstitute.org/hc/en-us)
-- [**SnpEff**](https://pcingola.github.io/)
-- [**SnpSift**](https://pcingola.github.io/)
-- [**vcf2maf**](https://github.com/mskcc/vcf2maf)
-- [**VEP**](https://www.ensembl.org/info/docs/tools/vep/index.html)
-- [**FastQC**](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
-- [**MultiQC**](https://multiqc.info/)
-
 ## Quick Start
 
 ```shell

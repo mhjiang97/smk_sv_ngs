@@ -55,3 +55,31 @@ rule download_vep_cache:
         fi; }} \\
         > {log} 2>&1
         """
+
+
+rule download_annotsv_cache:
+    conda:
+        "../../envs/git.yaml"
+    output:
+        **get_annotsv_cache_outputs(),
+        annotsv=temp(directory(f"{config['cache_annotsv']}/AnnotSV")),
+    params:
+        **get_annotsv_cache_parameters(),
+        dir=config["cache_annotsv"],
+        version=config["version_annotsv"],
+    log:
+        "logs/download_annotsv_cache.log",
+    shell:
+        """
+        {{ git clone https://github.com/lgmgeo/AnnotSV.git {output.annotsv}
+        cd {output.annotsv} || exit 1
+        git checkout {params.version}
+
+        make PREFIX=. install
+        make PREFIX=. {params.arg_install}
+
+        for dir in {params.dirs}; do
+            mv ${{dir}} ../
+        done; }} \\
+        > {log} 2>&1
+        """
