@@ -17,8 +17,6 @@ rule annotsv:
         genome=format_genome(config["genome"]),
         max_size=config["max_size_annotsv"],
         size_chunk=config["size_chunk"],
-    resources:
-        n_instance=1,
     log:
         "logs/{sample}/annotsv.{caller}.log",
     shell:

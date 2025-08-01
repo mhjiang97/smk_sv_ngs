@@ -6,7 +6,6 @@ keep-incomplete: True
 cores: 80
 resources:
   mem_mb: 500000  # 500GB
-  n_instance: 1
 default-resources:
   mem_mb: 5000  # 5GB
 set-threads:
