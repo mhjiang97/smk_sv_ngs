@@ -46,7 +46,7 @@ rule format_gridss:
         rdata="gridss/{sample}/{sample}.RData",
     params:
         genome=config["genome"],
-        libs_r=get(config, "libs_r", None),
+        libs_r=config.get("libs_r", None),
     log:
         "logs/{sample}/format_gridss.log",
     script:

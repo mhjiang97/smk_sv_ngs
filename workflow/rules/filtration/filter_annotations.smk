@@ -17,7 +17,7 @@ rule filter_annotations:
         rdata="{caller}/{sample}/merged/filtered/{sample}.{type_sv}.RData",
         table="{caller}/{sample}/merged/filtered/{sample}.{type_sv}.tsv",
     params:
-        libs_r=get(config, "libs_r", None),
+        libs_r=config.get("libs_r", None),
         callers=sorted(CALLERS),
         terms_relative=config["terms_relative"],
     threads: 1

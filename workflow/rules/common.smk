@@ -10,12 +10,6 @@ configfile: "config/config.yaml"
 pepfile: "config/pep/config.yaml"
 
 
-path_env_vep = Path("workflow/envs/vep.yaml").resolve()
-
-
-path_env_annotsv = Path("workflow/envs/annotsv.yaml").resolve()
-
-
 if config["dir_run"] and config["dir_run"] is not None:
 
     workdir: config["dir_run"]
@@ -114,8 +108,8 @@ path_cache_vep = (
 # *--------------------------------------------------------------------------* #
 perform_validations_with_rich(
     config,
-    path_env_vep,
-    path_env_annotsv,
+    workflow.source_path("../envs/vep.yaml"),
+    workflow.source_path("../envs/annotsv.yaml"),
     [
         "fasta",
         "polymorphism_known",
