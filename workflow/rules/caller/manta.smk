@@ -1,23 +1,15 @@
-rule manta:
-    conda:
-        "../../envs/manta.yaml"
+rule manta_config:
     input:
-        bam=f"{MAPPER}/{{sample}}/{{sample}}.sorted.md.recal.bam",
         fasta=config["fasta"],
     output:
-        config="manta/{sample}/config.ini",
-        script="manta/{sample}/runWorkflow.py",
-        workspace=directory("manta/{sample}/workspace"),
-        vcf=protected("manta/{sample}/results/variants/tumorSV.vcf.gz"),
-        vcf_renamed=protected("manta/{sample}/{sample}.vcf"),
+        config="manta/config.ini",
     params:
         min_reads=config["min_reads"],
-    threads: 1
     log:
-        "logs/{sample}/manta.log",
+        "logs/manta_config.log",
     shell:
         """
-        {{ {{ echo "[manta]"
+        {{ echo "[manta]"
         echo "referenceFasta = {input.fasta}"
         echo "minCandidateVariantSize = 8"
         echo "rnaMinCandidateVariantSize = 1000"
@@ -34,10 +26,33 @@ rule manta:
         echo "enableRemoteReadRetrievalForInsertionsInCancerCallingModes = 0"
         echo "useOverlapPairEvidence = 0"
         echo "enableEvidenceSignalFilter = 1"; }} \\
-        > {output.config}
+            1> {output.config} \\
+            2> {log}
+        """
 
-        out_dir=$(dirname {output.config})
-        configManta.py --config {output.config} --referenceFasta {input.fasta} --tumorBam {input.bam} --runDir ${{out_dir}}
+
+rule manta:
+    conda:
+        "../../envs/manta.yaml"
+    input:
+        bam=f"{MAPPER}/{{sample}}/{{sample}}.sorted.md.recal.bam",
+        fasta=config["fasta"],
+        config="manta/config.ini",
+    output:
+        script="manta/{sample}/runWorkflow.py",
+        workspace=directory("manta/{sample}/workspace"),
+        vcf=protected("manta/{sample}/results/variants/tumorSV.vcf.gz"),
+        vcf_renamed=protected("manta/{sample}/{sample}.vcf"),
+    threads: 1
+    log:
+        "logs/{sample}/manta.log",
+    shell:
+        """
+        {{ configManta.py \\
+            --config {input.config} \\
+            --referenceFasta {input.fasta} \\
+            --tumorBam {input.bam} \\
+            --runDir $(dirname {output.script})
 
         {output.script} -j {threads}
 
