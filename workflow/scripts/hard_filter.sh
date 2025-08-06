@@ -13,7 +13,6 @@ max_dhbfc=${snakemake_params[max_dhbfc]}
 caller=${snakemake_wildcards[caller]}
 
 formula_length="INFO/SVTYPE != \"BND\" & ABS(INFO/SVLEN) < ${min_size}"
-formula_chrom='CHROM !~ "^chr"'
 formula_del="INFO/SVTYPE == \"DEL\" & FMT/DHFFC[0] > ${min_dhffc}"
 formula_dup="INFO/SVTYPE == \"DUP\" & FMT/DHBFC[0] < ${max_dhbfc}"
 
@@ -47,7 +46,9 @@ else
     exit 1
 fi
 
-formula="(${formula_chrom}) | (${formula_length}) | (${formula_coverage}) | (${formula_reads}) | (${formula_del}) | (${formula_dup})"
+formula="(${formula_length}) | (${formula_coverage}) | (${formula_reads}) | (${formula_del}) | (${formula_dup})"
 
-bcftools filter -e "${formula}" -Ov "${vcf}" > "${vcf_filtered}"; } \
+grep -E "^#|^chr" "${vcf}" \
+    | bcftools filter -e "${formula}" -Ov - \
+    > "${vcf_filtered}"; } \
 1> "${snakemake_log[0]}" 2>&1
