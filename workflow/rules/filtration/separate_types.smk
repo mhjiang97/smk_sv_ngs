@@ -9,5 +9,8 @@ rule separate_types:
         "logs/{sample}/separate_types.{caller}.{type_sv}.log",
     shell:
         """
-        bcftools filter -i "SVTYPE ~ {wildcards.type_sv}" {input.vcf} > {output.vcf}
+        bcftools filter \\
+            -i "INFO/SVTYPE ~ '{wildcards.type_sv}'" \\
+            {input.vcf} \\
+            1> {output.vcf} 2> {log}
         """
