@@ -14,9 +14,8 @@ rule fastqc:
         "logs/{sample}/fastqc.log",
     shell:
         """
-        [ -d {output.dir} ] || mkdir -p {output.dir}
-
-        fastqc -o {output.dir} -t {threads} {input.fq_1} {input.fq_2} \\
+        {{ [ -d {output.dir} ] || mkdir -p {output.dir}
+        fastqc -o {output.dir} -t {threads} {input.fq_1} {input.fq_2}; }} \\
         1> {log} 2>&1
         """
 
