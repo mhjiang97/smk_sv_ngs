@@ -8,11 +8,12 @@ rule gridss:
         jar=config["jar_gridss"],
     output:
         vcf=temp("gridss/{sample}/tmp.vcf"),
-        dir_working_1=temp("gridss/{sample}/tmp.vcf.assembly.bam.gridss.working"),
-        dir_working_2=temp(
-            "gridss/{sample}/{sample}.sorted.md.recal.bam.gridss.working"
+        dir_1=temp(directory("gridss/{sample}/tmp.vcf.assembly.bam.gridss.working")),
+        dir_2=temp(directory("gridss/{sample}/tmp.vcf.gridss.working")),
+        dir_3=temp(
+            directory("gridss/{sample}/{sample}.sorted.md.recal.bam.gridss.working")
         ),
-        dir_working_3=temp("gridss/{sample}/tmp.vcf.gridss.working"),
+        dir_4=temp(directory(f"gridss/{{sample}}/{get_user_name()}")),
     threads: 1
     resources:
         mem_mb=1,
@@ -32,7 +33,8 @@ rule gridss:
             -o {output.vcf} \\
             -w {resources.tmpdir} \\
             --skipsoftcliprealignment \\
-            {input.bam}
+            {input.bam} \\
+            1> {log} 2>&1
         """
 
 
