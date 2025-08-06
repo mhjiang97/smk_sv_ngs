@@ -1,4 +1,5 @@
 import logging
+import os
 from math import floor
 from pathlib import Path
 
@@ -78,6 +79,15 @@ def get_annotsv_cache_parameters():
         }
     else:
         raise ValueError("Unsupported species")
+
+
+def get_user_name():
+    name = os.getenv("USER") or os.getenv("USERNAME") or os.getlogin()
+
+    if not name:
+        raise ValueError("Unable to determine user name.")
+
+    return name
 
 
 # *--------------------------------------------------------------------------* #
