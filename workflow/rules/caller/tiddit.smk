@@ -6,7 +6,7 @@ rule tiddit:
         fasta=config["fasta"],
         index=ancient(files_bwa_index),
     output:
-        vcf=protected("tiddit/{sample}/{sample}.vcf"),
+        vcf=temp("tiddit/{sample}/tmp.vcf"),
         tab=protected("tiddit/{sample}/{sample}.ploidies.tab"),
         tmp=directory("tiddit/{sample}/{sample}_tiddit"),
     params:
@@ -29,4 +29,21 @@ rule tiddit:
             -q {params.min_quality_mapping} \\
             -o {params.prefix} \\
             1> {log} 2>&1
+        """
+
+
+rule format_tiddit:
+    input:
+        vcf="tiddit/{sample}/tmp.vcf",
+    output:
+        vcf=protected("tiddit/{sample}/{sample}.vcf"),
+    log:
+        "logs/{sample}/format_tiddit.log",
+    shell:
+        """
+        bcftools annotate \\
+            --set-id '%ID\\-%CHROM\\_%POS' \\
+            {input.vcf} \\
+            1> {output.vcf} \\
+            2> {log}
         """
