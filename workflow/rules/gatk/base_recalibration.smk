@@ -21,8 +21,10 @@ rule base_recalibrator:
 
         gatk BaseRecalibrator \\
             --java-options "-Xmx{resources.mem_mb}M -XX:-UsePerfData" \\
-            --input {input.bam} --output {output.table} \\
-            --reference {input.fasta} ${{known_sites}}; }} \\
+            --input {input.bam} \\
+            --output {output.table} \\
+            --reference {input.fasta} \\
+            ${{known_sites}}; }} \\
         1> {log} 2>&1
         """
 
@@ -46,8 +48,10 @@ rule apply_bqsr:
         """
         {{ gatk ApplyBQSR \\
             --java-options "-Xmx{resources.mem_mb}M -XX:-UsePerfData" \\
-            --input {input.bam} --output {output.bam} \\
-            --bqsr-recal-file {input.table} --reference {input.fasta}
+            --input {input.bam} \\
+            --output {output.bam} \\
+            --reference {input.fasta} \\
+            --bqsr-recal-file {input.table}
 
         cp {output.bai} {output.bai_renamed}
         touch {output.bai_renamed}; }} \\

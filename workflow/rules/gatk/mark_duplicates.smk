@@ -17,8 +17,13 @@ rule mark_duplicates:
         """
         {{ gatk MarkDuplicates \\
             --java-options \"-Xmx{resources.mem_mb}M -XX:-UsePerfData\"  \\
-            --INPUT {input.bam}  --OUTPUT {output.bam} --METRICS_FILE {output.metrics} \\
-            --REMOVE_DUPLICATES false --CREATE_INDEX true --ASSUME_SORT_ORDER coordinate --REFERENCE_SEQUENCE {input.fasta}
+            --INPUT {input.bam} \\
+            --OUTPUT {output.bam} \\
+            --REFERENCE_SEQUENCE {input.fasta} \\
+            --METRICS_FILE {output.metrics} \\
+            --REMOVE_DUPLICATES false \\
+            --CREATE_INDEX true \\
+            --ASSUME_SORT_ORDER coordinate
 
         cp {output.bai} {output.bai_renamed}
         touch {output.bai_renamed}; }} \\
