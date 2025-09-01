@@ -28,7 +28,7 @@ rule format_wham:
         "../../envs/bcftools.yaml"
     input:
         vcf="wham/{sample}/tmp.vcf",
-        fai=path_fai,
+        fai=fai_fasta,
     output:
         vcf="wham/{sample}/{sample}.vcf",
     threads: 1

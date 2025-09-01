@@ -93,7 +93,7 @@ files_bwamem2_index = multiext(
 )
 files_bwa_index = multiext(config["fasta"], ".amb", ".ann", ".bwt", ".pac", ".sa")
 
-path_fai = config["fasta"] + ".fai"
+fai_fasta = f"{config['fasta']}.fai"
 
 path_cache_snpeff = (
     f"{config['cache_snpeff']}/{config['genome']}.{config['version_snpeff']}"
