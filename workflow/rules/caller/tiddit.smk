@@ -7,10 +7,10 @@ rule tiddit:
         index=ancient(files_bwa_index),
     output:
         vcf=temp("tiddit/{sample}/tmp.vcf"),
-        tab=protected("tiddit/{sample}/{sample}.ploidies.tab"),
-        tmp=directory("tiddit/{sample}/{sample}_tiddit"),
+        tab=temp("tiddit/{sample}/tmp.ploidies.tab"),
+        tmp=temp(directory("tiddit/{sample}/tmp_tiddit")),
     params:
-        prefix="tiddit/{sample}/{sample}",
+        prefix="tiddit/{sample}/tmp",
         min_reads=config["min_reads"],
         min_quality_mapping=config["min_quality_mapping"],
     threads: 1
@@ -35,15 +35,18 @@ rule tiddit:
 rule format_tiddit:
     input:
         vcf="tiddit/{sample}/tmp.vcf",
+        tab="tiddit/{sample}/tmp.ploidies.tab",
     output:
         vcf=protected("tiddit/{sample}/{sample}.vcf"),
+        tab=protected("tiddit/{sample}/{sample}.ploidies.tab"),
     log:
         "logs/{sample}/format_tiddit.log",
     shell:
         """
-        bcftools annotate \\
+        {{ bcftools annotate \\
             --set-id '%ID\\-%CHROM\\_%POS' \\
             {input.vcf} \\
-            1> {output.vcf} \\
-            2> {log}
+            > {output.vcf}
+        cp {input.tab} {output.tab}; }} \\
+        1> {log} 2>&1
         """

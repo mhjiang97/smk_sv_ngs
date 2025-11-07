@@ -1,10 +1,6 @@
 dir_run: /projects/project_xxx/analysis/wgs
 dir_data: /projects/project_xxx/data/wgs
 
-libs_r:
-  - /local/var/R/Rlibrary4/
-  - /.condax/r-base/lib/R/library
-
 species: homo_sapiens
 genome: GRCh37
 
